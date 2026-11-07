@@ -1,0 +1,3 @@
+service_name: visualization
+port: 8050
+log_file: /app/logs/visualization.log

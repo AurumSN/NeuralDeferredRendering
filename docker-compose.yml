@@ -1,6 +1,55 @@
 services:
+  storage:
+    build: ./services/storage
+    volumes:
+      - ./services/storage/config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      retries: 10
+
   collector:
     build: ./services/collector
     volumes:
       - ./services/collector/config.yaml:/app/config.yaml:ro
+      - ./data:/app/data:ro
       - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      retries: 10
+
+  ml-service:
+    build: ./services/ml-service
+    volumes:
+      - ./services/ml-service/config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      retries: 10
+
+  web-master:
+    build: ./services/web-master
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./services/web-master/config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      retries: 10
+
+  visualization:
+    build: ./services/visualization
+    ports:
+      - "8050:8050"
+    volumes:
+      - ./services/visualization/config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8050/health')"]
+      interval: 5s
+      retries: 10
