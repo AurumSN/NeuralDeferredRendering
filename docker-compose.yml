@@ -25,6 +25,7 @@ services:
     volumes:
       - ./services/ml-service/config.yaml:/app/config.yaml:ro
       - ./logs:/app/logs
+    depends_on: [storage]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 5s
@@ -37,6 +38,7 @@ services:
     volumes:
       - ./services/web-master/config.yaml:/app/config.yaml:ro
       - ./logs:/app/logs
+    depends_on: [collector, storage, ml-service]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 5s
@@ -49,6 +51,7 @@ services:
     volumes:
       - ./services/visualization/config.yaml:/app/config.yaml:ro
       - ./logs:/app/logs
+    depends_on: [web-master]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8050/health')"]
       interval: 5s
