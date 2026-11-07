@@ -15,8 +15,6 @@ logging.basicConfig(
 
 log = logging.getLogger(cfg["service_name"])
 
-log.info("Hello, World!")
-
 app = FastAPI(title=cfg["service_name"])
 
 
@@ -72,5 +70,5 @@ def reset():
     _cursor, _files = 0, None
 
     log.info("cursor reset")
-    
+
     return {"status": "reset"}

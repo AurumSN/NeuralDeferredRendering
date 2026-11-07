@@ -1,3 +1,8 @@
 service_name: web-master
 port: 8000
 log_file: /app/logs/web-master.log
+services:
+  collector: http://collector:8000
+  storage: http://storage:8000
+  ml-service: http://ml-service:8000
+  visualization: http://visualization:8050
