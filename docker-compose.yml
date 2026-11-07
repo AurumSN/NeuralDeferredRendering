@@ -1,9 +1,25 @@
 services:
+  postgres:
+    image: postgres:16
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      retries: 10
+
   storage:
     build: ./services/storage
+    env_file: .env
     volumes:
       - ./services/storage/config.yaml:/app/config.yaml:ro
       - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 5s
@@ -56,3 +72,6 @@ services:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8050/health')"]
       interval: 5s
       retries: 10
+
+volumes:
+  pg_data:
