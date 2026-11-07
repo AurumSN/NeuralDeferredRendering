@@ -1,0 +1,5 @@
+service_name: collector
+port: 8000
+log_file: /app/logs/collector.log
+dataset_dir: /app/data
+batch_size: 8
