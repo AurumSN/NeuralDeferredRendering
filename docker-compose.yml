@@ -14,6 +14,8 @@ services:
   storage:
     build: ./services/storage
     env_file: .env
+    ports:
+      - "8001:8000" # для отладки
     volumes:
       - ./services/storage/config.yaml:/app/config.yaml:ro
       - ./logs:/app/logs
